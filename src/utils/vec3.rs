@@ -1,6 +1,7 @@
 use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
+use std::ops::Sub;
 
 #[derive(Copy, Clone)]
 pub struct Vec3 {
@@ -24,6 +25,10 @@ impl Vec3 {
 
     pub fn unit_vector(vector: Vec3) -> Vec3 {
         vector / vector.length()
+    }
+
+    pub fn dot(&self, other: &Vec3) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z
     }
 }
 
@@ -87,3 +92,14 @@ impl<'a> Mul<&'a Vec3> for f32 {
     }
 }
 
+impl<'a> Sub<&'a Vec3> for Vec3 {
+    type Output = Vec3;
+
+    fn sub(self, rhs: &'a Vec3) -> Vec3 {
+        Vec3 {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z
+        }
+    }
+}
