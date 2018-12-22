@@ -20,7 +20,11 @@ impl Vec3 {
     }
 
     fn length(&self) -> f32 {
-        (self.x * self.x + self.y * self.y + self.z * self.z as f32).sqrt()
+        self.squared_length().sqrt()
+    }
+
+    pub fn squared_length(&self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z as f32
     }
 
     pub fn unit_vector(vector: Vec3) -> Vec3 {
