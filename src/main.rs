@@ -1,4 +1,5 @@
 extern crate lodepng;
+extern crate rand;
 
 mod scenery;
 mod utils;
@@ -12,7 +13,7 @@ use utils::ray::Ray;
 use utils::rgb::RGB;
 use utils::vec3::Vec3;
 
-fn color(ray: &Ray, scene: &Scene) -> Vec3 {
+fn get_color_for_ray(ray: &Ray, scene: &Scene) -> Vec3 {
     if let Some(hit) = scene.hit(&ray, 0.0, 100.0) {
         return 0.5 * Vec3::new(
             hit.normal.x + 1.0,
@@ -29,6 +30,7 @@ fn color(ray: &Ray, scene: &Scene) -> Vec3 {
 fn main() {
     const WIDTH: usize = 800;
     const HEIGHT: usize = 400;
+    const SAMPLES: usize = 100;
 
     let mut data = [RGB::default(); WIDTH * HEIGHT];
 
@@ -40,11 +42,16 @@ fn main() {
 
     for y in 0..HEIGHT {
         for x in 0..WIDTH {
-            let u = x as f32 / WIDTH as f32;
-            let v = y as f32 / HEIGHT as f32;
-            let ray = camera.get_ray(u, v);
+            let mut color = Vec3::new(0.0, 0.0, 0.0);
+            for _s in 0..SAMPLES {
+                let u = (x as f32 + rand::random::<f32>()) / WIDTH as f32;
+                let v = (y as f32 + rand::random::<f32>()) / HEIGHT as f32;
+                let ray = camera.get_ray(u, v);
 
-            let color = color(&ray, &scene);
+                color = color + get_color_for_ray(&ray, &scene);
+
+            }
+            color = color / SAMPLES as f32;
             let r = (255.99 * color.x) as u8;
             let g = (255.99 * color.y) as u8;
             let b = (255.99 * color.z) as u8;
