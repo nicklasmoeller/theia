@@ -7,6 +7,7 @@ use scenery::hitable::Hitable;
 use scenery::scene::Scene;
 use scenery::sphere::Sphere;
 
+use utils::camera::Camera;
 use utils::ray::Ray;
 use utils::rgb::RGB;
 use utils::vec3::Vec3;
@@ -29,41 +30,19 @@ fn main() {
     const WIDTH: usize = 800;
     const HEIGHT: usize = 400;
 
-    const LOWER_LEFT_CORNER: Vec3 = Vec3 {
-        x: -2.0,
-        y: -1.0,
-        z: -1.0
-    };
-
-    const HORIZONTAL: Vec3 = Vec3 {
-        x: 4.0,
-        y: 0.0,
-        z: 0.0
-    };
-
-    const VERTICAL: Vec3 = Vec3 {
-        x: 0.0,
-        y: 2.0,
-        z: 0.0
-    };
-
-    const ORIGIN: Vec3 = Vec3 {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0
-    };
-
     let mut data = [RGB::default(); WIDTH * HEIGHT];
 
     let mut scene: Scene = Scene::new();
     scene.add_sphere(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5));
     scene.add_sphere(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0));
 
+    let camera = Camera::new();
+
     for y in 0..HEIGHT {
         for x in 0..WIDTH {
             let u = x as f32 / WIDTH as f32;
             let v = y as f32 / HEIGHT as f32;
-            let ray = Ray::new(ORIGIN, LOWER_LEFT_CORNER + u * HORIZONTAL + v * VERTICAL);
+            let ray = camera.get_ray(u, v);
 
             let color = color(&ray, &scene);
             let r = (255.99 * color.x) as u8;
