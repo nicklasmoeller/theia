@@ -1,10 +1,11 @@
 use ::scenery::hitable::HitRecord;
 use ::utils::ray::Ray;
 use ::utils::vec3::Vec3;
-use super::{Material, Scatterable};
+use super::{Material, Scatterable, random_in_unit_sphere};
 
 pub struct Metal {
-    pub albebo: Vec3
+    pub albebo: Vec3,
+    pub fuzz: f32
 }
 
 impl Scatterable for Metal {
@@ -13,7 +14,7 @@ impl Scatterable for Metal {
 
         if target.dot(&hit_record.normal) > 0.0 {
             Some(Material {
-                ray: Ray::new(hit_record.p, target),
+                ray: Ray::new(hit_record.p, target + self.fuzz * random_in_unit_sphere()),
                 attenuation: self.albebo
             })
         } else {

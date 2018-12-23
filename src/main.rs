@@ -61,14 +61,16 @@ fn main() {
         Vec3::new(1.0, 0.0, -1.0),
         0.5,
         Box::new(Metal {
-            albebo: Vec3::new(0.8, 0.6, 0.2)
+            albebo: Vec3::new(0.8, 0.6, 0.2),
+            fuzz: 0.3
         })
     ));
     scene.add_sphere(Sphere::new(
         Vec3::new(-1.0, 0.0, -1.0),
         0.5,
         Box::new(Metal {
-            albebo: Vec3::new(0.8, 0.8, 0.8)
+            albebo: Vec3::new(0.8, 0.8, 0.8),
+            fuzz: 1.0
         })
     ));
 
