@@ -24,7 +24,7 @@ impl Hitable for Scene {
         self.hitables.iter().fold(
             None,
             |last_hit, hitable| {
-                hitable.hit(ray, t_min, last_hit.map_or(t_max, |hit| hit.t)).or(last_hit)
+                hitable.hit(ray, t_min, last_hit.as_ref().map_or(t_max, |hit| hit.t)).or(last_hit)
             }
         )
     }

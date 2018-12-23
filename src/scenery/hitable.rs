@@ -1,11 +1,12 @@
+use ::materials::Scatterable;
 use ::utils::vec3::Vec3;
 use ::utils::ray::Ray;
 
-#[derive(Copy, Clone)]
-pub struct HitRecord {
+pub struct HitRecord<'a> {
     pub t: f32,
     pub p: Vec3,
-    pub normal: Vec3
+    pub normal: Vec3,
+    pub material: &'a Box<dyn Scatterable>
 }
 
 pub trait Hitable {

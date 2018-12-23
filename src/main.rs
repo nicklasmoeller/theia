@@ -1,8 +1,11 @@
 extern crate lodepng;
 extern crate rand;
 
+mod materials;
 mod scenery;
 mod utils;
+
+use materials::lambertian::Lambertian;
 
 use scenery::hitable::Hitable;
 use scenery::scene::Scene;
@@ -49,8 +52,20 @@ fn main() {
     let mut data = [RGB::default(); WIDTH * HEIGHT];
 
     let mut scene: Scene = Scene::new();
-    scene.add_sphere(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5));
-    scene.add_sphere(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0));
+    scene.add_sphere(Sphere::new(
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+        Box::new(Lambertian {
+            albebo: Vec3::new(0.0, 0.0, 0.0)
+        })
+    ));
+    scene.add_sphere(Sphere::new(
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+        Box::new(Lambertian {
+            albebo: Vec3::new(0.0, 0.0, 0.0)
+        })
+    ));
 
     let camera = Camera::new();
 
