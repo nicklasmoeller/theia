@@ -6,6 +6,7 @@ mod scenery;
 mod utils;
 
 use materials::lambertian::Lambertian;
+use materials::metal::Metal;
 
 use scenery::hitable::Hitable;
 use scenery::scene::Scene;
@@ -16,32 +17,22 @@ use utils::ray::Ray;
 use utils::rgb::RGB;
 use utils::vec3::Vec3;
 
-fn get_color_for_ray(ray: &Ray, scene: &Scene) -> Vec3 {
+fn get_color_for_ray(ray: &Ray, scene: &Scene, depth: u8) -> Vec3 {
     if let Some(hit) = scene.hit(&ray, 0.001, std::f32::MAX) {
-        let target: Vec3 = hit.p + hit.normal + random_in_unit_sphere();
-        return 0.5 * get_color_for_ray(
-            &Ray::new(hit.p, target - hit.p),
-            scene
-        );
+        match hit.material.scatter(&ray, &hit) {
+            Some(scatter) => {
+                if depth < 50 {
+                    return scatter.attenuation * get_color_for_ray(&scatter.ray, &scene, depth + 1);
+                }
+                return Vec3::new(0.0, 0.0, 0.0)
+            },
+            _ => Vec3::new(0.0, 0.0, 0.0)
+        }
     } else {
         let unit_direction: Vec3 = Vec3::unit_vector(ray.direction);
         let t: f32 = 0.5 * (unit_direction.y + 1.0);
         return (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.5, 0.7, 1.0);
     }
-}
-
-fn random_in_unit_sphere() -> Vec3 {
-    let mut point: Vec3;
-    while {
-        point = 2.0 * Vec3::new(
-            rand::random(),
-            rand::random(),
-            rand::random()
-        ) - Vec3::new(1.0, 1.0, 1.0);
-
-        point.squared_length() >= 1.0
-    } {}
-    point
 }
 
 fn main() {
@@ -56,14 +47,28 @@ fn main() {
         Vec3::new(0.0, 0.0, -1.0),
         0.5,
         Box::new(Lambertian {
-            albebo: Vec3::new(0.0, 0.0, 0.0)
+            albebo: Vec3::new(0.8, 0.3, 0.3)
         })
     ));
     scene.add_sphere(Sphere::new(
         Vec3::new(0.0, -100.5, -1.0),
         100.0,
         Box::new(Lambertian {
-            albebo: Vec3::new(0.0, 0.0, 0.0)
+            albebo: Vec3::new(0.8, 0.8, 0.0)
+        })
+    ));
+    scene.add_sphere(Sphere::new(
+        Vec3::new(1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal {
+            albebo: Vec3::new(0.8, 0.6, 0.2)
+        })
+    ));
+    scene.add_sphere(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Box::new(Metal {
+            albebo: Vec3::new(0.8, 0.8, 0.8)
         })
     ));
 
@@ -77,7 +82,7 @@ fn main() {
                 let v = (y as f32 + rand::random::<f32>()) / HEIGHT as f32;
                 let ray = camera.get_ray(u, v);
 
-                color = color + get_color_for_ray(&ray, &scene);
+                color = color + get_color_for_ray(&ray, &scene, 0);
 
             }
             color = color / SAMPLES as f32;

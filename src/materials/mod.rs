@@ -12,4 +12,20 @@ pub trait Scatterable {
     fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> Option<Material>;
 }
 
+pub fn random_in_unit_sphere() -> Vec3 {
+    let mut point: Vec3;
+    while {
+        point = 2.0 * Vec3::new(
+            rand::random(),
+            rand::random(),
+            rand::random()
+        ) - Vec3::new(1.0, 1.0, 1.0);
+
+        point.squared_length() >= 1.0
+    } {}
+    point
+}
+
+
 pub mod lambertian;
+pub mod metal;
