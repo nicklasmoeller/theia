@@ -108,6 +108,19 @@ impl<'a> Mul<&'a Vec3> for f32 {
     }
 }
 
+impl Mul<f32> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: f32) -> Vec3 {
+        Vec3 {
+            x: self.x * rhs,
+            y: self.y * rhs,
+            z: self.z * rhs
+        }
+    }
+}
+
+
 impl Sub<Vec3> for Vec3 {
     type Output = Vec3;
 

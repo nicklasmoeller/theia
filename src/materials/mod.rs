@@ -26,6 +26,6 @@ pub fn random_in_unit_sphere() -> Vec3 {
     point
 }
 
-
+pub mod dielectric;
 pub mod lambertian;
 pub mod metal;

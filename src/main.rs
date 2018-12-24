@@ -5,6 +5,7 @@ mod materials;
 mod scenery;
 mod utils;
 
+use materials::dielectric::Dielectric;
 use materials::lambertian::Lambertian;
 use materials::metal::Metal;
 
@@ -47,7 +48,7 @@ fn main() {
         Vec3::new(0.0, 0.0, -1.0),
         0.5,
         Box::new(Lambertian {
-            albebo: Vec3::new(0.8, 0.3, 0.3)
+            albebo: Vec3::new(0.1, 0.2, 0.5)
         })
     ));
     scene.add_sphere(Sphere::new(
@@ -62,15 +63,14 @@ fn main() {
         0.5,
         Box::new(Metal {
             albebo: Vec3::new(0.8, 0.6, 0.2),
-            fuzz: 0.3
+            fuzz: 0.0
         })
     ));
     scene.add_sphere(Sphere::new(
         Vec3::new(-1.0, 0.0, -1.0),
         0.5,
-        Box::new(Metal {
-            albebo: Vec3::new(0.8, 0.8, 0.8),
-            fuzz: 1.0
+        Box::new( Dielectric {
+            ri: 1.5
         })
     ));
 
