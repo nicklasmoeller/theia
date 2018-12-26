@@ -4,27 +4,41 @@ use ::utils::vec3::Vec3;
 use super::{Material, Scatterable};
 
 pub struct Dielectric {
-    pub ri: f32
+    pub ref_idx: f32
 }
 
 impl Scatterable for Dielectric {
     fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> Option<Material> {
         let outward_normal: Vec3;
+        let reflected: Vec3 = reflect(ray.direction, hit_record.normal);;
+        let mut refracted: Vec3 = Vec3::new(0.0, 0.0, 0.0);
         let target: Vec3;
         let ni_over_nt: f32;
 
+        let reflect_prob: f32;
+        let cosine: f32;
+
         if ray.direction.dot(&hit_record.normal) > 0.0 {
             outward_normal = -1.0 * hit_record.normal;
-            ni_over_nt = self.ri;
+            ni_over_nt = self.ref_idx;
+            cosine = self.ref_idx * ray.direction.dot(&hit_record.normal) / ray.direction.length();
         } else {
             outward_normal = hit_record.normal;
-            ni_over_nt = 1.0 / self.ri;
+            ni_over_nt = 1.0 / self.ref_idx;
+            cosine = -1.0 * self.ref_idx * ray.direction.dot(&hit_record.normal) / ray.direction.length();
         }
 
         if let Some(scattered) = refract(ray.direction, outward_normal, ni_over_nt) {
-            target = scattered;
+            refracted = scattered;
+            reflect_prob = schlick(cosine, self.ref_idx);
         } else {
-            target = reflect(ray.direction, hit_record.normal);
+            reflect_prob = 1.0;
+        }
+
+        if rand::random::<f32>() < reflect_prob {
+            target = reflected;
+        }  else {
+            target = refracted;
         }
 
         Some(Material {
@@ -47,4 +61,9 @@ fn refract(v: Vec3, n: Vec3, ni_over_nt: f32) -> Option<Vec3> {
     } else {
         None
     }
+}
+
+fn schlick(cosine: f32, ref_idx: f32) -> f32 {
+    let r0 = ((1.0 - ref_idx) / (1.0 + ref_idx)).powf(2.0);
+    r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0)
 }

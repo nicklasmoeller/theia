@@ -70,7 +70,14 @@ fn main() {
         Vec3::new(-1.0, 0.0, -1.0),
         0.5,
         Box::new( Dielectric {
-            ri: 1.5
+            ref_idx: 1.5
+        })
+    ));
+    scene.add_sphere(Sphere::new(
+        Vec3::new(-1.0, 0.0, -1.0),
+        -0.45,
+        Box::new( Dielectric {
+            ref_idx: 1.5
         })
     ));
 
