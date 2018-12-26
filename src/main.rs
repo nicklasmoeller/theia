@@ -81,7 +81,13 @@ fn main() {
         })
     ));
 
-    let camera = Camera::new();
+    let camera = Camera::new(
+        Vec3::new(-2.0, 2.0, 1.0),
+        Vec3::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        90.0,
+        (WIDTH as f32) / (HEIGHT as f32)
+    );
 
     for y in 0..HEIGHT {
         for x in 0..WIDTH {
