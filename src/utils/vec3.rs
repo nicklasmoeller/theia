@@ -128,7 +128,6 @@ impl Mul<f32> for Vec3 {
     }
 }
 
-
 impl Sub<Vec3> for Vec3 {
     type Output = Vec3;
 
@@ -140,7 +139,6 @@ impl Sub<Vec3> for Vec3 {
         }
     }
 }
-
 
 impl<'a> Sub<&'a Vec3> for Vec3 {
     type Output = Vec3;
