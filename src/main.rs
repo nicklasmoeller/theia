@@ -81,12 +81,16 @@ fn main() {
         })
     ));
 
+    let look_from = Vec3::new(3.0, 3.0, 2.0);
+    let look_at = Vec3::new(0.0, 0.0, -1.0);
     let camera = Camera::new(
-        Vec3::new(-2.0, 2.0, 1.0),
-        Vec3::new(0.0, 0.0, -1.0),
+        look_from,
+        look_at,
         Vec3::new(0.0, 1.0, 0.0),
         90.0,
-        (WIDTH as f32) / (HEIGHT as f32)
+        (WIDTH as f32) / (HEIGHT as f32),
+        2.0,
+        (look_from - look_at).length()
     );
 
     for y in 0..HEIGHT {
