@@ -42,7 +42,7 @@ impl Scatterable for Dielectric {
         }
 
         Some(Material {
-            ray: Ray::new(hit_record.p, target),
+            ray: Ray::new(hit_record.p, target, ray.time),
             attenuation: Vec3::new(1.0, 1.0, 1.0)
         })
     }

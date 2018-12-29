@@ -11,6 +11,7 @@ use materials::lambertian::Lambertian;
 use materials::metal::Metal;
 
 use scenery::hitable::Hitable;
+use scenery::moving_sphere::MovingSphere;
 use scenery::scene::Scene;
 use scenery::sphere::Sphere;
 
@@ -61,8 +62,14 @@ fn  make_scene() -> Scene {
             if (center - Vec3::new(4.0, 0.2, 0.0)).length() > 0.9 {
                 if choose_mat < 0.8 {
                     // Diffuse
-                    scene.add_hitable(Sphere::new(
+                    scene.add_hitable(MovingSphere::new(
                         center,
+                        center + Vec3::new(
+                            0.0,
+                            0.5 * rand::random::<f32>(),
+                            0.0),
+                        0.0,
+                        1.0,
                         0.2,
                         Lambertian {
                             albebo: Vec3::new(
@@ -152,7 +159,9 @@ fn main() {
         20.0,
         (WIDTH as f32) / (HEIGHT as f32),
         0.1,
-        10.0
+        10.0,
+        0.0,
+        1.0
     );
 
     let scene = make_scene();
