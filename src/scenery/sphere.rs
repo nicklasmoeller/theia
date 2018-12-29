@@ -20,7 +20,7 @@ impl Sphere {
     }
 }
 
-impl Hitable for Sphere  {
+impl Hitable for Sphere {
     fn hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let origin_center: Vec3 = ray.origin - self.center;
         let a: f32 = ray.direction.dot(&ray.direction);

@@ -8,7 +8,7 @@ pub struct Material {
     pub attenuation: Vec3
 }
 
-pub trait Scatterable {
+pub trait Scatterable: Sync {
     fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> Option<Material>;
 }
 
