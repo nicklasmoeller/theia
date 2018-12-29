@@ -156,15 +156,16 @@ fn main() {
 
     for y in 0..HEIGHT {
         for x in 0..WIDTH {
-            let mut color = Vec3::new(0.0, 0.0, 0.0);
-            for _s in 0..SAMPLES {
-                let u = (x as f32 + rand::random::<f32>()) / WIDTH as f32;
-                let v = (y as f32 + rand::random::<f32>()) / HEIGHT as f32;
-                let ray = camera.get_ray(u, v);
+            let mut color = (0..SAMPLES).fold(
+                Vec3::new(0.0, 0.0, 0.0),
+                |color, _| {
+                    let u = (x as f32 + rand::random::<f32>()) / WIDTH as f32;
+                    let v = (y as f32 + rand::random::<f32>()) / HEIGHT as f32;
+                    let ray = camera.get_ray(u, v);
 
-                color = color + get_color_for_ray(&ray, &scene, 0);
-
-            }
+                    color + get_color_for_ray(&ray, &scene, 0)
+                }
+            );
             color = color / SAMPLES as f32;
             // Square root color for gamma correction
             color = Vec3::new(color.x.sqrt(), color.y.sqrt(), color.z.sqrt());
