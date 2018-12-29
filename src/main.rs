@@ -1,5 +1,6 @@
 extern crate lodepng;
 extern crate rand;
+extern crate rayon;
 
 mod materials;
 mod scenery;
@@ -17,6 +18,8 @@ use utils::camera::Camera;
 use utils::ray::Ray;
 use utils::rgb::RGB;
 use utils::vec3::Vec3;
+
+use rayon::prelude::*;
 
 fn get_color_for_ray(ray: &Ray, scene: &Scene, depth: u8) -> Vec3 {
     if let Some(hit) = scene.hit(&ray, 0.001, std::f32::MAX) {
@@ -156,16 +159,16 @@ fn main() {
 
     for y in 0..HEIGHT {
         for x in 0..WIDTH {
-            let mut color = (0..SAMPLES).fold(
-                Vec3::new(0.0, 0.0, 0.0),
+            let mut color: Vec3 = (0..SAMPLES).into_par_iter().fold(
+                || Vec3::new(0.0, 0.0, 0.0),
                 |color, _| {
                     let u = (x as f32 + rand::random::<f32>()) / WIDTH as f32;
                     let v = (y as f32 + rand::random::<f32>()) / HEIGHT as f32;
                     let ray = camera.get_ray(u, v);
 
                     color + get_color_for_ray(&ray, &scene, 0)
-                }
-            );
+                })
+                .sum();
             color = color / SAMPLES as f32;
             // Square root color for gamma correction
             color = Vec3::new(color.x.sqrt(), color.y.sqrt(), color.z.sqrt());

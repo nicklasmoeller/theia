@@ -2,6 +2,7 @@ use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
+use std::iter::Sum;
 
 #[derive(Copy, Clone)]
 pub struct Vec3 {
@@ -149,5 +150,11 @@ impl<'a> Sub<&'a Vec3> for Vec3 {
             y: self.y - rhs.y,
             z: self.z - rhs.z
         }
+    }
+}
+
+impl Sum for Vec3 {
+    fn sum<I: Iterator<Item=Vec3>>(iter: I) -> Vec3 {
+        iter.fold(Vec3::new(0.0, 0.0, 0.0), Vec3::add)
     }
 }
