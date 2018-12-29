@@ -39,7 +39,7 @@ fn get_color_for_ray(ray: &Ray, scene: &Scene, depth: u8) -> Vec3 {
 fn  make_scene() -> Scene {
     let mut scene: Scene = Scene::new();
 
-    scene.add_sphere(Sphere::new(
+    scene.add_hitable(Sphere::new(
         Vec3::new(0.0, -1000.0, 0.0),
         1000.0,
         Lambertian {
@@ -58,7 +58,7 @@ fn  make_scene() -> Scene {
             if (center - Vec3::new(4.0, 0.2, 0.0)).length() > 0.9 {
                 if choose_mat < 0.8 {
                     // Diffuse
-                    scene.add_sphere(Sphere::new(
+                    scene.add_hitable(Sphere::new(
                         center,
                         0.2,
                         Lambertian {
@@ -71,7 +71,7 @@ fn  make_scene() -> Scene {
                     ));
                 } else if choose_mat < 0.95 {
                     // Metal
-                    scene.add_sphere(Sphere::new(
+                    scene.add_hitable(Sphere::new(
                         center,
                         0.2,
                         Metal {
@@ -85,7 +85,7 @@ fn  make_scene() -> Scene {
                     ));
                 } else {
                     // Glass
-                    scene.add_sphere(Sphere::new(
+                    scene.add_hitable(Sphere::new(
                         center,
                         0.2,
                         Dielectric {
@@ -97,7 +97,7 @@ fn  make_scene() -> Scene {
         }
     }
 
-    scene.add_sphere(Sphere::new(
+    scene.add_hitable(Sphere::new(
         Vec3::new(0.0, 1.0, 0.0),
         1.0,
         Dielectric {
@@ -105,7 +105,7 @@ fn  make_scene() -> Scene {
         }
     ));
 
-    scene.add_sphere(Sphere::new(
+    scene.add_hitable(Sphere::new(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
         Lambertian {
@@ -117,7 +117,7 @@ fn  make_scene() -> Scene {
         }
     ));
 
-    scene.add_sphere(Sphere::new(
+    scene.add_hitable(Sphere::new(
         Vec3::new(4.0, 1.0, 0.0),
         1.0,
         Metal {

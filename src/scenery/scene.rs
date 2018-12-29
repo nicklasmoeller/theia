@@ -1,6 +1,5 @@
 use ::utils::ray::Ray;
 use super::hitable::{HitRecord, Hitable};
-use super::sphere::Sphere;
 
 pub struct Scene {
     hitables: Vec<Box<dyn Hitable>>
@@ -14,8 +13,8 @@ impl Scene {
         }
     }
 
-    pub fn add_sphere(&mut self, sphere: Sphere) {
-        self.hitables.push(Box::new(sphere));
+    pub fn add_hitable<T: Hitable + 'static>(&mut self, hitable: T) {
+        self.hitables.push(Box::new(hitable));
     }
 }
 
