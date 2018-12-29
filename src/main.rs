@@ -42,9 +42,9 @@ fn  make_scene() -> Scene {
     scene.add_sphere(Sphere::new(
         Vec3::new(0.0, -1000.0, 0.0),
         1000.0,
-        Box::new(Lambertian {
+        Lambertian {
             albebo: Vec3::new(0.5, 0.5, 0.5)
-        })
+        }
     ));
 
     for a in -11..11 {
@@ -61,37 +61,37 @@ fn  make_scene() -> Scene {
                     scene.add_sphere(Sphere::new(
                         center,
                         0.2,
-                        Box::new(Lambertian {
+                        Lambertian {
                             albebo: Vec3::new(
                                 rand::random::<f32>() * rand::random::<f32>(),
                                 rand::random::<f32>() * rand::random::<f32>(),
                                 rand::random::<f32>() * rand::random::<f32>()
                             )
-                        })
+                        }
                     ));
                 } else if choose_mat < 0.95 {
                     // Metal
                     scene.add_sphere(Sphere::new(
                         center,
                         0.2,
-                        Box::new(Metal {
+                        Metal {
                             albebo: Vec3::new(
                                 0.5 * (1.0 + rand::random::<f32>()),
                                 0.5 * (1.0 + rand::random::<f32>()),
                                 0.5 * (1.0 + rand::random::<f32>())
                             ),
                             fuzz: 0.5 * rand::random::<f32>()
-                        })
+                        }
                     ));
                 } else {
                     // Glass
                     scene.add_sphere(Sphere::new(
                         center,
                         0.2,
-                        Box::new(Dielectric {
+                        Dielectric {
                             ref_idx: 1.5
                         })
-                    ));
+                    );
                 }
             }
         }
@@ -100,34 +100,34 @@ fn  make_scene() -> Scene {
     scene.add_sphere(Sphere::new(
         Vec3::new(0.0, 1.0, 0.0),
         1.0,
-        Box::new(Dielectric {
+        Dielectric {
             ref_idx: 1.5
-        })
+        }
     ));
 
     scene.add_sphere(Sphere::new(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
-        Box::new(Lambertian {
+        Lambertian {
             albebo: Vec3::new(
                 0.4,
                 0.2,
                 0.1
             )
-        })
+        }
     ));
 
     scene.add_sphere(Sphere::new(
         Vec3::new(4.0, 1.0, 0.0),
         1.0,
-        Box::new(Metal {
+        Metal {
             albebo: Vec3::new(
                 0.7,
                 0.6,
                 0.5
             ),
             fuzz: 0.0
-        })
+        }
     ));
 
     scene
