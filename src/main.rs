@@ -146,7 +146,7 @@ fn  make_scene() -> Scene {
 fn main() {
     const WIDTH: usize = 1200;
     const HEIGHT: usize = 800;
-    const SAMPLES: usize = 10;
+    const SAMPLES: usize = 100;
 
     let mut data = [RGB::default(); WIDTH * HEIGHT];
 
@@ -167,6 +167,7 @@ fn main() {
     let scene = make_scene();
 
     for y in 0..HEIGHT {
+        println!("{} of {}", y, HEIGHT);
         for x in 0..WIDTH {
             let mut color: Vec3 = (0..SAMPLES).into_par_iter().fold(
                 || Vec3::new(0.0, 0.0, 0.0),

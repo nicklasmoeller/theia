@@ -1,4 +1,5 @@
 use ::materials::{Scatterable};
+use ::scenery::aabb::AABB;
 use ::utils::vec3::Vec3;
 use ::utils::ray::Ray;
 
@@ -50,5 +51,15 @@ impl Hitable for Sphere {
         }
 
         None
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<AABB> {
+        let vec3_radius = Vec3::new(
+            self.radius,
+            self.radius,
+            self.radius
+        );
+
+        Some(AABB::new(&self.center - vec3_radius, &self.center + vec3_radius))
     }
 }

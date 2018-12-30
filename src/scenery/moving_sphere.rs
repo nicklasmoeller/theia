@@ -1,4 +1,5 @@
 use ::materials::{Scatterable};
+use ::scenery::aabb::AABB;
 use ::utils::vec3::Vec3;
 use ::utils::ray::Ray;
 
@@ -71,5 +72,18 @@ impl Hitable for MovingSphere {
         }
 
         None
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<AABB> {
+        let vec3_radius = Vec3::new(
+            self.radius,
+            self.radius,
+            self.radius
+        );
+
+        let first = AABB::new(&self.center(t0) - vec3_radius, &self.center(t0) + vec3_radius));
+        let last = AABB::new(&self.center(t1) - vec3_radius, &self.center(t1) + vec3_radius));
+
+        Some(AABB::surrounding_box(first, last))
     }
 }
