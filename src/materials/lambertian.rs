@@ -8,11 +8,11 @@ pub struct Lambertian {
 }
 
 impl Scatterable for Lambertian {
-    fn scatter(&self, _ray: &Ray, hit_record: &HitRecord) -> Option<Material> {
+    fn scatter(&self, ray: &Ray, hit_record: &HitRecord) -> Option<Material> {
         let target = hit_record.normal + random_in_unit_sphere();
 
         Some(Material {
-            ray: Ray::new(hit_record.p, target),
+            ray: Ray::new(hit_record.p, target, ray.time),
             attenuation: self.albebo
         })
     }

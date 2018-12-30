@@ -9,7 +9,9 @@ pub struct Camera {
     u: Vec3,
     v: Vec3,
     w: Vec3,
-    lens_radius: f32
+    lens_radius: f32,
+    shutter_open_time: f32,
+    shutter_close_time: f32
 }
 
 impl Camera {
@@ -20,7 +22,9 @@ impl Camera {
         field_of_view: f32,
         aspect: f32,
         aperture: f32,
-        focus_dist: f32
+        focus_dist: f32,
+        shutter_open_time: f32,
+        shutter_close_time: f32
     ) -> Camera {
         let lens_radius = aperture / 2.0;
 
@@ -40,16 +44,20 @@ impl Camera {
             u,
             v,
             w,
-            lens_radius
+            lens_radius,
+            shutter_open_time,
+            shutter_close_time
         }
     }
 
-    pub fn get_ray(&self, u: f32, v: f32) -> Ray {
+    pub fn get_ray(&self, s: f32, t: f32) -> Ray {
         let rd: Vec3 = self.lens_radius * random_in_unit_disk();
         let offset: Vec3 = self.u * rd.x + self.v * rd.y;
+        let time: f32 = self.shutter_open_time + rand::random::<f32>() * (self.shutter_close_time - self.shutter_open_time);
         Ray::new(
             self.origin + offset,
-            self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin - offset
+            self.lower_left_corner + s * self.horizontal + t * self.vertical - self.origin - offset,
+            time
         )
     }
 }

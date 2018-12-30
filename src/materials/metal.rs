@@ -14,7 +14,11 @@ impl Scatterable for Metal {
 
         if target.dot(&hit_record.normal) > 0.0 {
             Some(Material {
-                ray: Ray::new(hit_record.p, target + self.fuzz * random_in_unit_sphere()),
+                ray: Ray::new(
+                    hit_record.p,
+                    target + self.fuzz * random_in_unit_sphere(),
+                    ray.time
+                ),
                 attenuation: self.albebo
             })
         } else {
